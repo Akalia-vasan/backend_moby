@@ -17,7 +17,7 @@ class CodeController extends Controller
 
     public function create(Request $request)
     {
-        $digit = floor($request->digits);
+        $digit = intval($request->digits);
         $consignment_data = [];
         for($i=1;$i<=$digit;$i++)
         {
@@ -35,6 +35,12 @@ class CodeController extends Controller
 
     private function random_strings($length) {
        
-        return bin2hex(random_bytes($length));
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
 }
