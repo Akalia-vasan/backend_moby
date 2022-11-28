@@ -21,7 +21,7 @@ class CodeController extends Controller
     {
         $digit = intval($request->digits);
         $data = [];
-        $i = 0; 
+        $i = 1; 
         DB::beginTransaction();;
         while ($i<=$digit){ 
 	        $data[] =['unique_code' => $this->getCode(7)];
