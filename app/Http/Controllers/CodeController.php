@@ -22,17 +22,17 @@ class CodeController extends Controller
         $digit = intval($request->digits);
         $data = [];
         $i = 1; 
-        DB::beginTransaction();;
         while ($i<=$digit){ 
 	        $data[] =['unique_code' => $this->getCode(7)];
             $i++;
         }
-        $consignment_data= array_chunk($data, 500, true);
-
+        DB::beginTransaction();
+        $temp = array_unique(array_column($data, 'unique_code'));
+        $unique_arr = array_intersect_key($data, $temp);
+        $consignment_data = array_chunk($data, 5000);
         foreach ($consignment_data as $key => $consignment) {
             Code::insert($consignment);
         }
-        
         DB::commit();
         $data = [
             'time' => intval(microtime(true) - floor(LUMEN_START)),
