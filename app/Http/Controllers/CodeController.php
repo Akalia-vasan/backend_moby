@@ -27,11 +27,11 @@ class CodeController extends Controller
             $i++;
         }
         DB::beginTransaction();
-        $temp = array_unique(array_column($data, 'unique_code'));
-        $unique_arr = array_intersect_key($data, $temp);
-        $consignment_data = array_chunk($data, 5000);
+        $consignment_data = array_chunk($data, 1000);
         foreach ($consignment_data as $key => $consignment) {
-            Code::insert($consignment);
+            $temp = array_unique(array_column($consignment, 'unique_code'));
+            $unique_arr = array_intersect_key( $consignment, $temp);
+            Code::upsert($unique_arr, 'unique_code', $update=null);
         }
         DB::commit();
         $data = [
